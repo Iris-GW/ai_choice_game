@@ -23,56 +23,56 @@ Before running the project, ensure you have the following installed:
 ### Backend
 
 1. Clone the repository:
-   \`\`\`bash
+   ```bash
    git clone <repository-url>
    cd ai_choice_game
-   \`\`\`
+   ```
 
 2. Set up the virtual environment:
-   \`\`\`bash
+   ```bash
    python3 -m venv .venv
    source .venv/bin/activate
-   \`\`\`
+   ```
 
 3. Install backend dependencies:
-   \`\`\`bash
+   ```bash
    pip install -r requirements.txt
-   \`\`\`
+   ```
 
 4. Create a `.env` file in the root directory and add your OpenAI API key:
-   \`\`\`bash
+   ```bash
    OPENAI_API_KEY=<your-api-key>
-   \`\`\`
+   ```
 
 ### Frontend
 
 1. Navigate to the `frontend/` directory:
-   \`\`\`bash
+   ```bash
    cd frontend
-   \`\`\`
+   ```
 
 2. Install the required Node modules:
-   \`\`\`bash
+   ```bash
    npm install
-   \`\`\`
+   ```
 
 ### Running the Project
 
 #### Backend
 
 To start the Flask backend:
-\`\`\`bash
+```bash
 cd backend
 python openai_integration.py
-\`\`\`
+```
 
 #### Frontend
 
 To start the React frontend:
-\`\`\`bash
+```bash
 cd frontend
 npm start
-\`\`\`
+```
 
 The backend will handle API requests, while the frontend will provide the user interface for interaction.
 
@@ -84,9 +84,9 @@ Once both the backend and frontend are running, navigate to `http://localhost:30
 
 You can run a test prompt in the `openai_integration.py` file to ensure that the API is working correctly:
 
-\`\`\`bash
+```bash
 python openai_integration.py
-\`\`\`
+```
 
 This will send a prompt ("Describe a mysterious forest with two paths") to the OpenAI API and print the response in the console.
 

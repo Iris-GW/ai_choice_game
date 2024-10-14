@@ -1,0 +1,124 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Courier New', monospace;
+}
+
+/* Wrapper */
+.App {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: black; /* Set the background to black */
+  padding: 20px;
+}
+
+/* Character Name Display */
+.character-name {
+  display: none;  /* This will hide the element */
+}
+
+/* Dialogue Box */
+.dialogue-box {
+  width: 80%;
+  max-width: 600px;
+  padding: 20px;
+  background-color: white;  /* White background to contrast with black */
+  color: black;             /* Black text for readability */
+  border: 4px solid white;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 1.5em;
+  line-height: 1.5em;
+  box-shadow: 4px 4px 0 black, 8px 8px 0 white; /* Pixel art-style shadow */
+  transition: all 0.3s ease;
+}
+
+.dialogue-box p {
+  margin: 0;
+  font-family: monospace;
+}
+
+/* Choice Box */
+.choice-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.choice-box button {
+  width: 80%;
+  max-width: 400px;
+  padding: 15px;
+  background-color: white;  /* White buttons to contrast with black background */
+  border: 2px solid black;
+  cursor: pointer;
+  font-size: 1.2em;
+  font-family: monospace;
+  color: black;             /* Black text on white buttons */
+  box-shadow: 4px 4px 0 black;  /* Pixel-style shadow */
+  transition: all 0.2s ease;
+}
+
+.choice-box button:hover {
+  background-color: black;
+  color: white;             /* White text on hover */
+  box-shadow: 4px 4px 0 white, 8px 8px 0 black; /* Invert shadow colors on hover */
+}
+
+/* Status Box at the bottom-left corner with small white text */
+.status-box {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  color: white;
+  font-size: 0.8em; /* Smaller font size */
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .dialogue-box, .choice-box button {
+    width: 90%;
+    font-size: 1.2em;
+  }
+
+  .character-name {
+    font-size: 1.6em;
+  }
+}
+
+@media (max-width: 480px) {
+  .dialogue-box, .choice-box button {
+    width: 95%;
+    font-size: 1em;
+  }
+
+  .character-name {
+    font-size: 1.4em;
+  }
+}
+/* Wrapper */
+.App {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: black;
+  padding: 20px;
+  position: relative; /* Set position relative for status message positioning */
+}
+
+/* Status message at bottom left */
+.status-box {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  color: white;
+  font-size: 0.8em;
+  font-family: monospace;
+}
+

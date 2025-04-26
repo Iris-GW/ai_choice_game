@@ -1,7 +1,7 @@
 
 # AI Choice-Based Game
 
-This project integrates OpenAI's GPT-3.5 model to create a choice-based game where players interact with AI-generated characters and environments through text. The AI generates dynamic responses based on user inputs, allowing for immersive, choice-driven gameplay.
+This project integrates OpenAI's GPT-3.5 model to create a choice-based game. The AI generates dynamic responses based on user inputs, allowing for immersive, choice-driven gameplay.
 
 ## Project Structure
 

@@ -14,6 +14,7 @@
   height: 100vh;
   background-color: black; /* Set the background to black */
   padding: 20px;
+  position: relative; /* Set position relative for status message positioning */
 }
 
 /* Character Name Display */
@@ -42,16 +43,17 @@
   font-family: monospace;
 }
 
-/* Choice Box */
+/* Choice Box - Updated for 4 choices but keeping the column layout */
 .choice-box {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 80%;
+  max-width: 600px;
 }
 
 .choice-box button {
-  width: 80%;
-  max-width: 400px;
+  width: 100%;
   padding: 15px;
   background-color: white;  /* White buttons to contrast with black background */
   border: 2px solid black;
@@ -76,49 +78,39 @@
   left: 10px;
   color: white;
   font-size: 0.8em; /* Smaller font size */
+  font-family: monospace;
 }
 
 /* Responsive Styles */
 @media (max-width: 768px) {
-  .dialogue-box, .choice-box button {
+  .dialogue-box {
     width: 90%;
     font-size: 1.2em;
   }
+  
+  .choice-box {
+    width: 90%;
+  }
 
-  .character-name {
-    font-size: 1.6em;
+  .choice-box button {
+    font-size: 1.1em;
+    padding: 12px;
   }
 }
 
 @media (max-width: 480px) {
-  .dialogue-box, .choice-box button {
+  .dialogue-box {
     width: 95%;
     font-size: 1em;
   }
-
-  .character-name {
-    font-size: 1.4em;
+  
+  .choice-box {
+    width: 95%;
   }
-}
-/* Wrapper */
-.App {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: black;
-  padding: 20px;
-  position: relative; /* Set position relative for status message positioning */
-}
 
-/* Status message at bottom left */
-.status-box {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  color: white;
-  font-size: 0.8em;
-  font-family: monospace;
+  .choice-box button {
+    font-size: 0.9em;
+    padding: 10px;
+  }
 }
 

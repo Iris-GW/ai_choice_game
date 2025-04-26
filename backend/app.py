@@ -1,7 +1,17 @@
 from flask import Flask, jsonify, request
-from openai_integration import get_gpt35_response
 import json
 import re
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+# Import the appropriate AI module based on configuration
+use_deepseek = os.getenv("USE_DEEPSEEK", "false").lower() == "true"
+
+print("Using DeepSeek API")
+from deepseek_integration import get_deepseek_response as get_ai_response
 
 app = Flask(__name__)
 
@@ -31,15 +41,15 @@ def start_game():
     You are telling a short, interactive story. The player is standing at a crossroads. 
     Continue the story in **plain language only**, without any code, instructions, or examples. 
     Write exactly 3 sentences that describe what happens next. 
-    After the story, provide exactly 2 choices for the player, labeled '1' and '2'. 
+    After the story, provide exactly 4 choices for the player, labeled '1', '2', '3', and '4'. 
     Format the response in this exact JSON structure:
     {
       'story': 'story text here',
-      'choices': ['choice 1', 'choice 2']
+      'choices': ['choice 1', 'choice 2', 'choice 3', 'choice 4']
     }
     Do not include any programming code, technical instructions, or comments. Only return the plain JSON.
     """
-    response = get_gpt35_response(prompt)
+    response = get_ai_response(prompt)
     story_data = extract_json_from_response(response)
 
     if story_data and "story" in story_data and "choices" in story_data:
@@ -48,7 +58,7 @@ def start_game():
     else:
         return jsonify({
             "story": "There was an issue generating the initial story. Please try again.",
-            "choices": ["1. Retry", "2. Exit"]
+            "choices": ["1. Retry", "2. Exit", "3. Start a new story", "4. Try a different theme"]
         })
 
 # Route to handle player choice
@@ -58,7 +68,7 @@ def player_choice():
     data = request.get_json()
     choice = data.get('choice')
 
-    if choice not in [1, 2]:
+    if choice not in [1, 2, 3, 4]:  # Updated to accept 4 choices
         return jsonify({"error": "Invalid choice"}), 400
 
     # Add the player's choice to the existing story context
@@ -67,21 +77,21 @@ def player_choice():
     # Build the prompt to continue the story
     prompt = f"""
     The story so far: "{story_context}"
-    Based on the player's decision, continue the story in **plain language only**, without any code, instructions, or examples.
+    Based on the player's decision (option {choice}), continue the story in **plain language only**, 
+    without any code, instructions, or examples.
 
     Write exactly 3 sentences that describe what happens next in the story. 
-    After the story, provide exactly 2 new choices for the player in this JSON structure:
+    After the story, provide exactly 4 new choices for the player in this JSON structure:
     {{
     "story": "story text here",
-    "choices": ["choice 1", "choice 2"]
+    "choices": ["choice 1", "choice 2", "choice 3", "choice 4"]
     }}
 
     Do not include any code, comments, or the phrase 'the player chose option X'. Only return the JSON.
     """
 
-
-    # Get response from GPT-3.5 Turbo
-    response = get_gpt35_response(prompt)
+    # Get response from AI
+    response = get_ai_response(prompt)
     story_data = extract_json_from_response(response)
 
     if story_data and "story" in story_data and "choices" in story_data:
@@ -91,7 +101,7 @@ def player_choice():
     else:
         return jsonify({
             "story": "There was an issue generating the next part of the story. Please try again.",
-            "choices": ["1. Retry", "2. Exit"]
+            "choices": ["1. Retry", "2. Go back", "3. Try a different path", "4. Exit game"]
         })
 
 if __name__ == '__main__':

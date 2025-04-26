@@ -15,7 +15,7 @@ function App() {
                 console.log("Story received:", data);  // Log the received data
                 if (data.story) {
                     setStory(data.story);
-                    setChoices(data.choices); // Update choices based on the response
+                    setChoices(data.choices || []); // Update choices based on the response
                     setStatusMessage(""); // Clear any previous error messages
                 } else {
                     setStatusMessage("Failed to generate the initial story."); // Handle error
@@ -30,18 +30,18 @@ function App() {
     // Function to handle player choice and fetch the next story
     const handleChoice = (choice) => {
         console.log(`Choice made: ${choice}`);  // Log the choice made
-        setStatusMessage("Generating the next part of the story..."); // Show status message while waiting for GPT response
+        setStatusMessage("Generating the next part of the story..."); // Show status message while waiting for AI response
         fetch('/choice', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ choice })  // Send choice 1 or 2
+            body: JSON.stringify({ choice })  // Send choice (1, 2, 3, or 4)
         })
         .then(response => response.json())
         .then(data => {
             console.log("Next story received:", data);  // Log the next part of the story received
             if (data.story) {
                 setStory(data.story);  // Update story with new content
-                setChoices(data.choices); // Update choices with the new choices from the response
+                setChoices(data.choices || []); // Update choices with the new choices from the response
                 setStatusMessage("");  // Clear any error or loading message
             } else {
                 setStatusMessage("Failed to generate the next part of the story."); // Handle error
@@ -65,7 +65,11 @@ function App() {
             {/* Choice buttons - dynamically rendered */}
             <div className="choice-box">
                 {choices.map((choice, index) => (
-                    <button key={index} onClick={() => handleChoice(index + 1)}>
+                    <button 
+                        key={index} 
+                        onClick={() => handleChoice(index + 1)}
+                        className="choice-button"
+                    >
                         {choice}
                     </button>
                 ))}

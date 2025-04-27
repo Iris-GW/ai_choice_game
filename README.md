@@ -1,14 +1,14 @@
+# AI Choice-Based Game with LangGraph
 
-# AI Choice-Based Game
-
-This project integrates OpenAI's GPT-3.5 model to create a choice-based game. The AI generates dynamic responses based on user inputs, allowing for immersive, choice-driven gameplay.
+This project creates an interactive choice-based adventure game using LangGraph and DeepSeek's AI model. The game generates dynamic responses based on user inputs, allowing for immersive, choice-driven gameplay.
 
 ## Project Structure
 
-- `backend/`: Contains the Flask backend and OpenAI integration.
-  - `openai_integration.py`: Script responsible for interacting with OpenAI's GPT-3.5 API to generate responses.
-- `frontend/`: React-based frontend for user interaction.
-- `.venv/`: Python virtual environment containing dependencies.
+- **backend/**: Contains the Flask backend and AI integration.
+  - **app.py**: Flask application that handles HTTP requests.
+  - **game_graph.py**: LangGraph implementation for managing game state and AI interactions.
+- **frontend/**: React-based frontend for user interaction.
+- **.venv/**: Python virtual environment containing dependencies.
 
 ## Requirements
 
@@ -16,7 +16,7 @@ Before running the project, ensure you have the following installed:
 
 - Python 3.11+
 - Node.js (for the frontend)
-- OpenAI API Key
+- DeepSeek API Key
 
 ## Setup
 
@@ -30,8 +30,8 @@ Before running the project, ensure you have the following installed:
 
 2. Set up the virtual environment:
    ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate
+   python -m venv .venv
+   source .venv/bin/activate  # On Windows use `.venv\Scripts\activate`
    ```
 
 3. Install backend dependencies:
@@ -39,14 +39,14 @@ Before running the project, ensure you have the following installed:
    pip install -r requirements.txt
    ```
 
-4. Create a `.env` file in the root directory and add your OpenAI API key:
-   ```bash
-   OPENAI_API_KEY=<your-api-key>
+4. Create a `.env` file in the root directory and add your DeepSeek API key:
+   ```
+   DEEPSEEK_API_KEY=<your-api-key>
    ```
 
 ### Frontend
 
-1. Navigate to the `frontend/` directory:
+1. Navigate to the frontend directory:
    ```bash
    cd frontend
    ```
@@ -56,42 +56,73 @@ Before running the project, ensure you have the following installed:
    npm install
    ```
 
-### Running the Project
+## Running the Project
 
-#### Backend
+### Backend
 
 To start the Flask backend:
 ```bash
-cd backend
-python openai_integration.py
+flask run
 ```
 
-#### Frontend
+### Frontend
 
 To start the React frontend:
 ```bash
-cd frontend
 npm start
 ```
 
-The backend will handle API requests, while the frontend will provide the user interface for interaction.
+The backend will handle API requests and manage game state using LangGraph, while the frontend will provide the user interface for interaction.
 
-## Usage
+## Architecture
 
-Once both the backend and frontend are running, navigate to `http://localhost:3000` in your browser to interact with the choice-based game. You can input your choices and receive AI-generated responses from the GPT-3.5 model.
+### LangGraph Implementation
 
-## Sample Test
+The project uses LangGraph to create a stateful, directed graph for managing the game flow:
 
-You can run a test prompt in the `openai_integration.py` file to ensure that the API is working correctly:
+- **States**: Tracks story context, current story segment, available choices, and message history.
+- **Nodes**: Represents operations like generating stories and handling player choices.
+- **Edges**: Defines transitions between states based on player actions.
 
-```bash
-python openai_integration.py
-```
+### DeepSeek Integration
 
-This will send a prompt ("Describe a mysterious forest with two paths") to the OpenAI API and print the response in the console.
+The game uses DeepSeek's AI model to generate creative and contextually appropriate story segments and choices. The API integration:
+
+- Maintains conversation context across multiple turns
+- Ensures proper formatting of responses as JSON
+- Handles errors gracefully
+
+## API Endpoints
+
+- **GET /start**: Initializes a new game and returns the initial story and choices.
+- **POST /choice**: Accepts a player's choice and returns the next part of the story with new choices.
+- **POST /end**: Ends the current game session.
+
+## User Interface
+
+The frontend provides a minimalist black and white interface with:
+
+- A central dialogue box displaying the current story
+- Four choice buttons for player decisions
+- Status messages for error handling and game state
+
+## Development
+
+### Dependencies
+
+#### Backend:
+
+- Flask
+- LangGraph
+- python-dotenv
+- requests
+
+#### Frontend:
+
+- React
+- Axios for API calls
+- CSS for styling
 
 ## Issues and Contributions
 
 If you encounter any issues or would like to contribute to this project, please feel free to open an issue or submit a pull request.
-
-

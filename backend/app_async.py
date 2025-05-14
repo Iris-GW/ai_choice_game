@@ -467,6 +467,76 @@ Avoid obvious tropes or cartoonish evil. Make choices subtle and interesting."""
             "error": f"Error generating moral choices: {str(e)}"
         }), 500
 
+@app.route('/conclude', methods=['POST'])
+async def conclude_story():
+    """Generate a conclusion for the story based on player choices and chapter summaries"""
+    try:
+        data = await request.get_json()
+        
+        # Validate request
+        if not data or "chapters" not in data or "moral_alignment" not in data:
+            return jsonify({"error": "Missing chapter data or moral alignment"}), 400
+        
+        chapters = data["chapters"]  # List of chapter summaries/stories
+        choices = data.get("choices", [])  # List of player choices
+        moral_alignment = data["moral_alignment"]  # Player's final moral alignment
+        
+        # Create prompt for story conclusion
+        system_prompt = """You are a master storyteller creating epic conclusions to interactive adventures.
+Your task is to write a satisfying conclusion to a player's journey based on their choices and moral path.
+Always respond with a JSON object containing a 'conclusion' field with your finale text.
+The conclusion should be 3-5 sentences long, dramatic, and reflect the character's journey and moral choices."""
+
+        user_prompt = f"""Write a satisfying conclusion to this adventure based on the player's journey:
+
+Story chapters: {chapters}
+Player choices: {choices}
+Player's moral alignment: {moral_alignment}
+
+Create a conclusion that:
+1. Directly references at least one key choice the player made
+2. Reflects the player's moral alignment ({moral_alignment})
+3. Provides narrative closure but hints at future possibilities
+4. Has an appropriate tone (triumphant for good characters, darker for evil ones)
+5. Is 3-5 sentences long and dramatically satisfying
+
+The conclusion should feel earned based on the player's choices and serve as a fitting end to their unique journey."""
+        
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt}
+        ]
+        
+        # Get conclusion from AI
+        response = await generate_ai_response(messages)
+        if not response:
+            # Default fallback based on moral alignment
+            if moral_alignment in ["evil", "mostly_evil"]:
+                return jsonify({"conclusion": "Your dark choices have led you down a path from which there may be no return. The world around you bears the scars of your selfish actions, as shadows gather to embrace their new master. Yet even in this darkness, a small voice inside wonders what might have been had you chosen differently."}), 200
+            elif moral_alignment in ["good", "mostly_good"]:
+                return jsonify({"conclusion": "Your virtuous journey has brought light to those around you, and your name is whispered with reverence across the land. The path wasn't always easy, but your commitment to doing what's right has transformed not just the world, but your own soul. As you look toward the horizon, new adventures await, but you'll face them with the strength of your convictions."}), 200
+            else:
+                return jsonify({"conclusion": "Your journey ends here, balanced between light and shadow, having witnessed both the best and worst of what the world has to offer. The choices you made have left their mark, neither fully virtuous nor completely selfish. As you reflect on your path, you realize that in this world of moral complexity, you've carved out your own unique way - and whatever comes next, you'll face it on your own terms."}), 200
+            
+        # Try to extract JSON
+        conclusion_data = extract_json(response)
+        if conclusion_data and "conclusion" in conclusion_data:
+            return jsonify({"conclusion": conclusion_data["conclusion"]}), 200
+        
+        # If can't parse JSON, extract text directly
+        conclusion_match = re.search(r'"conclusion"\s*:\s*"([^"]*)"', response)
+        if conclusion_match:
+            return jsonify({"conclusion": conclusion_match.group(1)}), 200
+            
+        # Fallback - use response text directly with cleanup
+        clean_response = re.sub(r'[\{\}\"\[\]]', '', response)  # Remove JSON syntax
+        clean_response = re.sub(r'conclusion\s*:', '', clean_response).strip()  # Remove field name
+        return jsonify({"conclusion": clean_response}), 200
+            
+    except Exception as e:
+        print(f"Error generating conclusion: {str(e)}")
+        return jsonify({"conclusion": "Your journey has come to an end. Though the path was filled with challenges and choices, you've emerged changed by the experience. What adventures await beyond the horizon? Only time will tell."}), 200
+
 # --------------------
 # Run the application
 # --------------------

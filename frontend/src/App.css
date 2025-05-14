@@ -8,13 +8,98 @@
 /* Wrapper */
 .App {
   display: flex;
+  flex-direction: row; /* Change to row to accommodate sidebar */
+  height: 100vh;
+  background-color: black;
+  padding: 0; /* Remove padding */
+  position: relative;
+  overflow: hidden;
+}
+
+/* Sidebar styles */
+.sidebar {
+  width: 25%;
+  min-width: 250px;
+  height: 100vh;
+  background-color: #111;
+  color: white;
+  padding: 20px;
+  overflow-y: auto;
+  border-right: 2px solid white;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid white;
+  font-family: monospace;
+}
+
+.journey-entry {
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.3);
+}
+
+.journey-entry:last-child {
+  border-bottom: none;
+}
+
+.journey-entry .chapter {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #aaa;
+}
+
+.journey-entry .story-summary {
+  margin-bottom: 8px;
+  font-size: 0.9em;
+  line-height: 1.4;
+}
+
+.journey-entry .choice-made {
+  font-style: italic;
+  color: #0f0; /* Green text for choices */
+}
+
+/* Add this to your existing CSS */
+.chapter-summary {
+  font-style: italic;
+  color: #0ff; /* Cyan color for AI summaries */
+  margin: 8px 0;
+  font-size: 0.95em;
+  text-align: center;
+  padding: 6px 8px;
+  border-left: 2px solid #0ff;
+  background-color: rgba(0, 255, 255, 0.05);
+  line-height: 1.4;
+}
+
+/* Add this to your existing CSS */
+
+.current-chapter-indicator {
+  color: #0f0; /* Green text */
+  font-style: italic;
+  font-size: 0.9em;
+  margin-top: 4px;
+  text-align: center;
+  background-color: rgba(0, 255, 0, 0.05);
+  padding: 3px;
+  border-radius: 3px;
+}
+
+/* Main content container */
+.main-content {
+  flex: 1;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-color: black; /* Set the background to black */
   padding: 20px;
-  position: relative; /* Set position relative for status message positioning */
+  position: relative;
 }
 
 /* Character Name Display */
@@ -24,7 +109,7 @@
 
 /* Dialogue Box */
 .dialogue-box {
-  width: 80%;
+  width: 90%;
   max-width: 600px;
   padding: 20px;
   background-color: white;  /* White background to contrast with black */
@@ -45,11 +130,11 @@
 
 /* Choice Box - Updated for 4 choices but keeping the column layout */
 .choice-box {
+  width: 90%;
+  max-width: 600px;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 80%;
-  max-width: 600px;
 }
 
 .choice-box button {
@@ -81,8 +166,107 @@
   font-family: monospace;
 }
 
+/* Moral alignment styling */
+.moral-indicator {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #333;
+  margin-bottom: 20px;
+}
+
+.moral-meter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.moral-bar {
+  height: 15px;
+  width: 100%;
+  background-color: #555;
+  border-radius: 7px;
+  overflow: hidden;
+  position: relative;
+}
+
+.moral-fill {
+  height: 100%;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: width 0.5s ease, background-color 0.5s ease;
+}
+
+.moral-fill.good {
+  width: 80%;
+  background-color: #4caf50;
+  left: 10%;
+  transform: none;
+}
+
+.moral-fill.mostly_good {
+  width: 60%;
+  background-color: #8bc34a;
+  left: 20%;
+  transform: none;
+}
+
+.moral-fill.neutral {
+  width: 20%;
+  background-color: #ffeb3b;
+}
+
+.moral-fill.mostly_evil {
+  width: 60%;
+  background-color: #ff9800;
+  left: auto;
+  right: 20%;
+  transform: none;
+}
+
+.moral-fill.evil {
+  width: 80%;
+  background-color: #f44336;
+  left: auto;
+  right: 10%;
+  transform: none;
+}
+
+.moral-label {
+  font-size: 0.8em;
+  margin: 5px 0;
+  color: #aaa;
+}
+
+.moral-label.good {
+  align-self: flex-start;
+}
+
+.moral-label.evil {
+  align-self: flex-end;
+}
+
+
 /* Responsive Styles */
 @media (max-width: 768px) {
+  .App {
+    flex-direction: column; /* Stack vertically on small screens */
+  }
+  
+  .sidebar {
+    width: 100%;
+    min-width: 0;
+    height: 30vh;
+    border-right: none;
+    border-bottom: 2px solid white;
+  }
+  
+  .main-content {
+    height: 70vh;
+  }
+
   .dialogue-box {
     width: 90%;
     font-size: 1.2em;
